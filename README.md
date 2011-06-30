@@ -18,6 +18,10 @@ When imapclean.pl is invoked, it goes through your INBOX. If a message is marked
 
 imapclean.pl also goes through the INBOX._zDone mailbox. It's treated like the INBOX, except that all messages are marked as read automatically (and thus are archived on the next run). On some mail clients (e.g. iPhone), it's easier to move messages to the _zDone folder than it is to open them and then go back to the message list. Moving them also gets them out of your face immediately instead of waiting for imapclean.pl to archive them.
 
+Since imapclean.pl doesn't move messages until it sees them twice (so it doesn't move a message you just opened), figure out how long you want messages to stick around, and set it to run twice that often. For example, I want messages to sit in my inbox for 40 minutes after I've read them, so I run imapclean.pl every 20 minutes with a crontab entry like this:
+
+    */20 * * * * /home/tamboli/bin/imapclean.pl
+
 Caveats
 =======
 
