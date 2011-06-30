@@ -6,7 +6,7 @@ Requirements: Mail::IMAPClient, AppConfig
 Customize the configuration variables at the beginning of the script.
 
 HOST: your IMAP host
-USER: your IMAP login
+USER: your IMAP login (don't forget to escape the @)
 PASSWORD: your IMAP password
 TO: the mailbox read messages should be moved to
 READLISTDIR: the directory where the list of seen messages should be stored
@@ -21,7 +21,7 @@ imapclean.pl also goes through the INBOX._zDone mailbox. It's treated like the I
 Caveats
 =======
 
-This was written pretty quickly, based mostly on the sample code in the Mail::IMAPClient manpage, so there are probably optimizations that can be made with respect to moving messages in batches and other things.
+This was written pretty quickly, based mostly on the sample code in the Mail::IMAPClient manpage, so there are probably optimizations that can be made.
 
 Please also note that imapclean.pl will expunge deleted messages, whether they were marked as deleted through imapclean.pl's actions or not.
 

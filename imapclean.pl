@@ -13,8 +13,8 @@ my $config = AppConfig->new();
 
 $config->define(
     'HOST' =>
-      { ARGCOUNT => ARGCOUNT_ONE, DEFAULT => "mail.messagingengine.com" },
-    'USER' => { ARGCOUNT => ARGCOUNT_ONE, DEFAULT => "USERNAME" },
+      { ARGCOUNT => ARGCOUNT_ONE, DEFAULT => "HOST" },
+    'USER' => { ARGCOUNT => ARGCOUNT_ONE, DEFAULT => "USER" },
     'PASSWORD' => { ARGCOUNT => ARGCOUNT_ONE, DEFAULT => "PASSWORD" },
     'TO'       => { ARGCOUNT => ARGCOUNT_ONE, DEFAULT => "INBOX.Archive" },
     'DUMP' => { ARGCOUNT => ARGCOUNT_NONE },
@@ -102,16 +102,20 @@ for $mailbox (@mailboxes) {
 
     # Move union of read messages
     # ----------------------------------------
+	my @messages_to_move;
     for my $message (@read_messages) {
         # my $data = $imap->parse_headers( $message, "Subject", "From" );
         # my $address = $data->{From}->[0];
 		next unless($message);
         next unless ( $read_old{"$message"} );
 
-        die "Could not move message $message: $!"
-          unless $imap->move( $config->TO, $message );
-        print "Moved message $message to " . $config->TO, "\n";
+		push(@messages_to_move, $message);
+        print "Will move message $message to " . $config->TO, "\n";
     }
+	if($#messages_to_move > -1) {
+	    die "Could not move messages: $!"
+	      unless $imap->move( $config->TO, \@messages_to_move );
+	}
 
 	$imap->expunge($mailbox);
 
@@ -122,7 +126,7 @@ for $mailbox (@mailboxes) {
 		next unless($message);
 	    next if ( $read_old{$message} );
 	    print READLISTFILE "$message\n";
-	    print "Saving $message for next time...\n";
+	    print "Saving $message for next time\n";
 	}
 	close READLISTFILE;
 }
